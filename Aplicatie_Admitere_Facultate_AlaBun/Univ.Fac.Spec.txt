@@ -1,0 +1,43 @@
+3
+Universitatea din Bucuresti
+3
+Faculatea de Matematica si Informatica
+2
+Tehnologia Informatiei
+Informatica si Calculatoare
+Facultatea de Chimie
+2
+Chimie
+Chimie farmaceutica
+Facultatea de Fizica
+2
+Fizica
+Fizica medicala
+Universitatea de Vest Timisoara
+3
+Facultatea de Litere
+2
+Limbi si literaturi
+Limbi moderne aplicate
+Facultatea de Muzica si Teatru
+2
+Interpretare muzicala
+Artele spectacolului
+Facultatea de Sociologie si Psihologie
+2
+Asistenta sociala
+Resurse umane
+Universitatea Babes-Bolyai
+3
+Facultatea de Biologie si Geologie
+2
+Biochimie
+Biologie
+Facultatea de Geografie
+2
+Geografia turismului
+Cartografie
+Facultatea de Istorie si Filosofie
+2
+Filosofie
+Arheologie

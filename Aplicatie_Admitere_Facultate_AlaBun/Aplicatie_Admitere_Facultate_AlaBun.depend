@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1618096223 source:c:\users\raluca\documents\c\aplicatie_admitere_facultate_alabun\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
