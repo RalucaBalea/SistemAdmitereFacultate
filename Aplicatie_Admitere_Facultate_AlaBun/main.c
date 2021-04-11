@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #define FISIER_UNIFACSPEC "Univ.Fac.Spec.txt"
-
+#define FISIER_FORMULARE "Formulare.txt"
 
 /** Structuri date si functii pentru liste univ fac spec **/
 typedef struct{
@@ -195,6 +195,74 @@ void afisareFormulare(NodFormular* listaFormulare) {
     }
 }
 
+void salvareFormulare(NodFormular* listaFormulare){
+    FILE* fout = fopen("Formulare.txt", "w");
+
+    while(listaFormulare!=NULL) {
+        Formular form = listaFormulare->f;
+        fprintf(fout,"%s\n%s\n%d\n%s\n%g\n", form.nume, form.prenume, form.varsta, form.liceulAbsolvit, form.medieBac);
+        fprintf(fout,"%s\n%s\n%s\n", form.universitate, form.facultate, form.specializare);
+        listaFormulare = listaFormulare->next;
+    }
+
+    fclose(fout);
+}
+
+NodFormular* incarcareFormulare(NodFormular* listaFormulare) {
+	FILE* fin = fopen(FISIER_FORMULARE, "r");
+    char buffer[100];
+
+    while(!feof(fin)) {
+        fgets(buffer, 100, fin); //citesc nume
+        if(feof(fin)) break; //daca sunt la EOF, ies din bucla
+        buffer[strlen(buffer)-1] = '\0'; //scot endline-ul
+        Formular form; //initializare formular
+        strcpy(form.nume, buffer); //copiez numele in formular
+
+        //prenume
+        fgets(buffer, 100, fin);
+        buffer[strlen(buffer)-1] = '\0';
+        strcpy(form.prenume, buffer);
+
+        //varsta
+        fgets(buffer, 100, fin);
+        sscanf(buffer, "%d", &form.varsta);
+
+        //liceu
+        fgets(buffer, 100, fin);
+        buffer[strlen(buffer)-1] = '\0';
+        strcpy(form.liceulAbsolvit, buffer);
+
+        //medie bac
+        fgets(buffer, 100, fin);
+        sscanf(buffer, "%lf", &form.medieBac);
+
+        //universitate
+        fgets(buffer, 100, fin);
+        buffer[strlen(buffer)-1] = '\0';
+        form.universitate = malloc(strlen(buffer)*sizeof(char));
+        strcpy(form.universitate, buffer);
+
+        //facultate
+        fgets(buffer, 100, fin);
+        buffer[strlen(buffer)-1] = '\0';
+        form.facultate = malloc(strlen(buffer)*sizeof(char));
+        strcpy(form.facultate, buffer);
+
+        //specializare
+        fgets(buffer, 100, fin);
+        buffer[strlen(buffer)-1] = '\0';
+        form.specializare = malloc(strlen(buffer)*sizeof(char));
+        strcpy(form.specializare, buffer);
+
+        listaFormulare = introducereFormular(listaFormulare, form);
+    }
+	fclose(fin);
+
+	return listaFormulare;
+}
+
+
 int main()
 {
     /** INCARCARE UNIV FAC SPEC **/
@@ -204,8 +272,11 @@ int main()
 
     /** Lista Formulare **/
     NodFormular* listaFormulare = NULL;
-    listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
-    listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
+    //listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
+    //listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
+    //afisareFormulare(listaFormulare);
+
+    listaFormulare = incarcareFormulare(listaFormulare);
     afisareFormulare(listaFormulare);
 
 
