@@ -272,12 +272,42 @@ int main()
 
     /** Lista Formulare **/
     NodFormular* listaFormulare = NULL;
-    //listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
-    //listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
-    //afisareFormulare(listaFormulare);
 
-    listaFormulare = incarcareFormulare(listaFormulare);
-    afisareFormulare(listaFormulare);
+    enum {Introducere=1, Afisare, Salvare, Incarcare, Statistici, Iesire} opt;
+
+    do {
+        printf("1. Introducere formular\n");
+        printf("2. Afisare formulare\n");
+        printf("3. Salvare formulare\n");
+        printf("4. Incarcare formulare\n");
+        printf("5. Statistici\n");
+        printf("6. Iesire\n");
+        printf("Dati optiune: ");
+        scanf("%d", &opt);
+        getchar();
+
+        switch(opt) {
+        case Introducere:
+            listaFormulare = citireFormular(listaFormulare, listaUniversitati, nrUniversitati);
+            break;
+        case Afisare:
+            afisareFormulare(listaFormulare);
+            break;
+        case Salvare:
+            salvareFormulare(listaFormulare);
+            break;
+        case Incarcare:
+            listaFormulare = incarcareFormulare(listaFormulare);
+            break;
+        case Statistici:
+            break;
+        case Iesire:
+            break;
+        default:
+            printf("Ati introdus optiune gresita!\n");
+            break;
+        }
+    } while(opt != Iesire);
 
 
     return 0;
