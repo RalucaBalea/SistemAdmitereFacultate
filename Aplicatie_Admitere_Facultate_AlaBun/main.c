@@ -213,43 +213,36 @@ NodFormular* incarcareFormulare(NodFormular* listaFormulare) {
     char buffer[100];
 
     while(!feof(fin)) {
-        fgets(buffer, 100, fin); //citesc nume
-        if(feof(fin)) break; //daca sunt la EOF, ies din bucla
-        buffer[strlen(buffer)-1] = '\0'; //scot endline-ul
-        Formular form; //initializare formular
-        strcpy(form.nume, buffer); //copiez numele in formular
+        fgets(buffer, 100, fin);
+        if(feof(fin)) break;
+        buffer[strlen(buffer)-1] = '\0';
+        Formular form;
+        strcpy(form.nume, buffer);
 
-        //prenume
         fgets(buffer, 100, fin);
         buffer[strlen(buffer)-1] = '\0';
         strcpy(form.prenume, buffer);
 
-        //varsta
         fgets(buffer, 100, fin);
         sscanf(buffer, "%d", &form.varsta);
 
-        //liceu
         fgets(buffer, 100, fin);
         buffer[strlen(buffer)-1] = '\0';
         strcpy(form.liceulAbsolvit, buffer);
 
-        //medie bac
         fgets(buffer, 100, fin);
         sscanf(buffer, "%lf", &form.medieBac);
 
-        //universitate
         fgets(buffer, 100, fin);
         buffer[strlen(buffer)-1] = '\0';
         form.universitate = malloc(strlen(buffer)*sizeof(char));
         strcpy(form.universitate, buffer);
 
-        //facultate
         fgets(buffer, 100, fin);
         buffer[strlen(buffer)-1] = '\0';
         form.facultate = malloc(strlen(buffer)*sizeof(char));
         strcpy(form.facultate, buffer);
 
-        //specializare
         fgets(buffer, 100, fin);
         buffer[strlen(buffer)-1] = '\0';
         form.specializare = malloc(strlen(buffer)*sizeof(char));
@@ -262,15 +255,104 @@ NodFormular* incarcareFormulare(NodFormular* listaFormulare) {
 	return listaFormulare;
 }
 
+void afisareStatistici(NodFormular* listaFormulare, Universitate* listaUniversitati, int nrUniversitati){
+    int indexUni, indexFac, indexSpec, i, j, k, opt;
+    int count = 0;
+    Formular form;
+
+    printf("0. Statistici pe universitate\n");
+    printf("1. Statistici pe facultate\n");
+    printf("2. Statistici pe specializare\n");
+    printf("Optiune = "); scanf("%d", &opt);
+
+    switch(opt)
+    {
+    case 0:
+        for(i=0; i<nrUniversitati; i++) {
+            printf("%d %s\n", i, listaUniversitati[i].denumire);
+        }
+
+        printf("Optiune = ");
+        scanf("%d", &indexUni);
+
+        while(listaFormulare!=NULL) {
+            if(strcmp(listaFormulare->f.universitate, listaUniversitati[indexUni].denumire)==0) count++;
+            listaFormulare = listaFormulare->next;
+        }
+
+        printf("Studenti inscrisi la %s: %d.\n", listaUniversitati[indexUni].denumire, count);
+
+        break;
+
+    case 1:
+         for(i=0; i<nrUniversitati; i++) {
+            printf("%d %s\n", i, listaUniversitati[i].denumire);
+        }
+
+        printf("Optiune = ");
+        scanf("%d", &indexUni);
+
+        for(i=0; i<listaUniversitati[indexUni].nrFacultati; i++) {
+            printf("%d %s\n", i, listaUniversitati[indexUni].listaFacultati[i].denumire);
+        }
+        printf("Optiune = ");
+        scanf("%d", &indexFac);
+
+        while(listaFormulare!=NULL) {
+            if(strcmp(listaFormulare->f.universitate, listaUniversitati[indexUni].denumire)==0 &&
+               strcmp(listaFormulare->f.facultate, listaUniversitati[indexUni].listaFacultati[indexFac].denumire)==0) count++;
+            listaFormulare = listaFormulare->next;
+        }
+
+        printf("Studenti inscrisi la %s, %s: %d.\n", listaUniversitati[indexUni].denumire, listaUniversitati[indexUni].listaFacultati[indexFac].denumire, count);
+        break;
+    case 2:
+           for(i=0; i<nrUniversitati; i++) {
+            printf("%d %s\n", i, listaUniversitati[i].denumire);
+            }
+
+            printf("Optiune = ");
+            scanf("%d", &indexUni);
+
+            for(i=0; i<listaUniversitati[indexUni].nrFacultati; i++) {
+                printf("%d %s\n", i, listaUniversitati[indexUni].listaFacultati[i].denumire);
+            }
+            printf("Optiune = ");
+            scanf("%d", &indexFac);
+
+            for(i=0; i<listaUniversitati[indexUni].listaFacultati[indexFac].nrSpecializari; i++) {
+                printf("%d %s\n", i, listaUniversitati[indexUni].listaFacultati[indexFac].listaSpecializari[i].denumire);
+            }
+            printf("Optiune = ");
+            scanf("%d", &indexSpec);
+
+            while(listaFormulare!=NULL) {
+            if(strcmp(listaFormulare->f.universitate, listaUniversitati[indexUni].denumire)==0 &&
+               strcmp(listaFormulare->f.facultate, listaUniversitati[indexUni].listaFacultati[indexFac].denumire)==0 &&
+               strcmp(listaFormulare->f.specializare, listaUniversitati[indexUni].listaFacultati[indexFac].listaSpecializari[indexSpec].denumire)==0) count++;
+            listaFormulare = listaFormulare->next;
+            }
+
+            printf("Studenti inscrisi la %s, %s, %s: %d.\n", listaUniversitati[indexUni].denumire, listaUniversitati[indexUni].listaFacultati[indexFac].denumire,
+                   listaUniversitati[indexUni].listaFacultati[indexFac].listaSpecializari[indexSpec].denumire, count);
+
+
+            break;
+
+    default:
+        printf("Optiunea este gresita!\n");
+        return;
+        break;
+    }
+
+}
 
 int main()
 {
-    /** INCARCARE UNIV FAC SPEC **/
     Universitate *listaUniversitati;
     int nrUniversitati = 0;
     listaUniversitati = citireUniversitati(listaUniversitati, &nrUniversitati);
 
-    /** Lista Formulare **/
     NodFormular* listaFormulare = NULL;
 
     enum {Introducere=1, Afisare, Salvare, Incarcare, Statistici, Iesire} opt;
@@ -300,6 +382,7 @@ int main()
             listaFormulare = incarcareFormulare(listaFormulare);
             break;
         case Statistici:
+            afisareStatistici(listaFormulare, listaUniversitati, nrUniversitati);
             break;
         case Iesire:
             break;
